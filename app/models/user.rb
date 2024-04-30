@@ -20,7 +20,7 @@ class User < ApplicationRecord
                                 Hokkaido Hyogo Ibaraki Ishikawa Iwate Kagawa Kagoshima Kanagawa
                                 Kochi Kumamoto Kyoto Mie Miyagi Miyazaki Nagano Nagasaki Nara Niigata
                                 Okayama Okinawa Oita Osaka Saga Saitama Shiga Shimane Shizuoka Tochigi
-                                Tokushima Tokyo Tottori Toyama Wakayama Yamagata Yamaguchi Yamanashi], allow_nil: false }
+                                Tokushima Tokyo Tottori Toyama Wakayama Yamagata Yamaguchi], allow_nil: false }
 
   def user_photo
     unless self.photo.attached?
