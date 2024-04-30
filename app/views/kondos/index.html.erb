@@ -1,0 +1,48 @@
+<!-- Delete h1 later !-->
+<div class="container">
+  <% if user_signed_in? && current_user.provider? %>
+    <h2> My Kondos <small>(<%= @kondos.count %>)</small></h2>
+    <%= link_to "Add new Kondo", new_kondo_path, class: "btn btn-warning"  %>
+    <div class="row">
+    <% @kondos.each do |kondo| %>
+      <div class="col-xl-3 col-md-6 col-sm-12 d-flex justify-content-center">
+        <% all_bookings = kondo.bookings.where(status: ['waiting', 'confirmed']).count%>
+          <% if all_bookings == 0 %>
+            <%= render "components/cardProviderNoBadge",
+              price: kondo.price,
+              summary: kondo.summary.split(" ").first(10).join(" "),
+              kondo: kondo.name,
+              prefecture: kondo.prefecture,
+              path: kondo_path(kondo)
+            %>
+          <% else %>
+            <%= render "components/cardProvider",
+              book: all_bookings,
+              price: kondo.price,
+              summary: kondo.summary.split(" ").first(10).join(" "),
+              kondo: kondo.name,
+              prefecture: kondo.prefecture,
+              path: kondo_path(kondo)
+            %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- Map for providers -->
+      <div id="map"
+            style="width: 100%; height: 600px;"
+            data-markers="<%= @markers.to_json %>"
+            data-mapbox-api-key="<%= ENV['MAPBOX_API_KEY'] %>"></div>
+  </div>
+
+  <% else  %>
+
+    <!-- For renters and unauthenticated users -->
+    <div id="side-filter">
+      <%= render  "components/search_index", filter: :search, path: kondos_path %>
+    </div>
+    <div id="kondos">
+      <%= render "kondo_index", kondos: @kondos %>
+    </div>
+  <% end %>
+</div>

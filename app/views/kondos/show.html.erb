@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row justify-content-around">
+    <div id="booking-form" class="col-lg-6 col-sm-12 p-4 m-2" style="background: white;">
+      <div class="row text-center">
+
+        <div class="col-lg-4 col-sm-4">
+          <%= link_to profile_path (@kondo.user.profile_id) do %>
+            <%= cl_image_tag @kondo.user.user_photo, style: "width: 200px; height: 200px; object-fit: cover; border-radius: 50%;"%>
+          <% end %>
+        </div>
+
+        <div class="col-lg-8 col-sm-6 align-self-center">
+          <%= link_to profile_path (@kondo.user.profile_id) do %>
+            <h3><%= @kondo.user.first_name %> <%= @kondo.user.last_name %></h3>
+          <% end %>
+          <h5><%= @kondo.name %></h5>
+        </div>
+      </div>
+
+      <%# --- Start of Kondo Details --- %>
+      <div class="row">
+        <div class="col-12 py-5">
+          <h4>Details</h4>
+          <p><%= @kondo.details %></p>
+        </div>
+        <%# Only the provider who created the kondo can see this %>
+        <% if @user.present? && @user[:is_kondo_creator?] %>
+          <div class="col-12 d-flex justify-content-between">
+            <%= link_to "Edit", edit_kondo_path(@kondo), style: "color: green" %>
+            <%= link_to "Delete", kondo_path(@kondo), method: :delete, data: { confirm: "Are you sure?" }, style: "color: red" %>
+          </div>
+        <% end %>
+      </div>
+      <%# --- End of Kondo Details --- %>
+    </div>
+
+    <%# Review cheat sheet: https://docs.google.com/spreadsheets/d/1wh7T1UGmmVacvZtotEdq9aZ1-9o-BayaYrR3fnfPRWg/edit#gid=0 %>
+    <%# Renters can view a kondo and see booking status / book a kondo / leave a review %>
+    <% if @user.present? && @user[:user_type] == "renter" %>
+      <%# renter can book if they have never booked the kondo yet or if previous booking for the kondo is completed or declined %>
+      <% if @user[:can_book?] %>
+        <%= render "booking_form" %>
+        <%# renter can review if most recent booking status for kondo is completed and if they have not made a review yet %>
+        <% if @user[:can_review?] %>
+          <%= render "review_form" %>
+        <% end %>
+      <% else %>
+        <%# if renter can't book (if status is waiting or confirmed), show booking status %>
+        <%= render "booking_status" %>
+      <% end %>
+    <% end %>
+
+    <%# Visitors can view a kondo and can make an attempt to book a kondo %>
+    <% if @user.present? && @user[:user_type] == "visitor" %>
+      <%= render "booking_form" %>
+    <% end %>
+
+    <%# Only shows up for renters who have left a review on their completed bookings if there is at least one review for this kondo %>
+    <% if @reviews.present? && !@reviews.count.zero? %>
+      <%= render "submitted_reviews", reviews: @reviews %>
+    <% end %>
+  </div>
+</div>
+
+
+
+<%# Only the provider who created the kondo can see this %>
+<% if @user.present? && @user[:is_kondo_creator?] %>
+  <%= render "bookings_for_provider" %>
+<% end %>

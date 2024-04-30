@@ -1,0 +1,40 @@
+<div class="container">
+  <h3>My Bookings</h3>
+  <div class="row"> 
+    <div class="col-xl-8 col-md-10 col-sm-12">
+      <div class="d-flex justify-content-around py-5" id="booking-index-nav">
+        <%= link_to "All", bookings_path(user_id: current_user.id) %>
+        <%= link_to "Waiting", bookings_path(status: "waiting") %>
+        <%= link_to "Confirmed", bookings_path(status: "confirmed") %>
+        <%= link_to "Declined", bookings_path(status: "declined") %>
+        <%= link_to "Completed", bookings_path(status: "completed") %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <% @bookings.each do |booking| %>
+    <div class="col-lg-6">
+      <% kondo = Kondo.find(booking.kondo_id) %>
+      <div class="card mb-3" style="max-width: 480px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <%= cl_image_tag kondo.user.user_photo, class:"card-img", style:"height: 100%" %>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title" style="min-height: 2em;"><%= kondo.name %></h5>
+              <p class="card-text">Provider: <%= User.find(kondo.user_id).first_name %></p>
+              <p class="card-text">Booked Date: <%= booking.booked_date %></p>
+              <div class="d-flex">
+                <p class="card-text mr-2">Status:</p>
+                <p class="card-text" style="color:<%= booking.booked_status_color %>"><%= booking.status.capitalize %></p>
+              </div>
+              <p class="card-text"><%= link_to "See Details", kondo_path(kondo, booking_id: booking.id) %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

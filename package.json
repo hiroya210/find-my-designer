@@ -1,0 +1,22 @@
+{
+  "name": "project",
+  "private": true,
+  "dependencies": {
+    "@rails/actioncable": "^6.0.0",
+    "@rails/activestorage": "^6.0.0",
+    "@rails/ujs": "^6.0.0",
+    "@rails/webpacker": "5.4.3",
+    "@splidejs/splide": "^3.6.12",
+    "bootstrap": "4.6",
+    "jquery": "^3.6.0",
+    "mapbox-gl": "^2.7.0",
+    "places.js": "^1.19.0",
+    "popper.js": "^1.16.1",
+    "sweetalert2": "^11.3.10",
+    "turbolinks": "^5.2.0"
+  },
+  "version": "0.1.0",
+  "devDependencies": {
+    "webpack-dev-server": "^4.7.3"
+  }
+}
